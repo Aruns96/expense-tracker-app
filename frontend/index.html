@@ -15,10 +15,13 @@
     <label for="name">User Name</label>
     <input type="text" name="name" id="name" required>
     <label for="email">Email</label>
-    <input type="email" name="email" id="email" placeholder="email" required>
+    <input type="text" name="email" id="email" placeholder="email" required>
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" placeholder="password" required>
+    <input type="text" name="password" id="password" placeholder="password" required>
     <button>sign up</button>
+    
+    
+
 </form>
 
  
@@ -39,7 +42,7 @@
     email,
     password
    }
-  
+   
     
     axios.post("http://localhost:3000/user/sign-up" ,obj)
     .then(res =>{
@@ -49,9 +52,12 @@
     })
     .catch(e => {
         console.log(e)
-        document.body.innerHTML=document.body.innerHTML + "<h3>error occured</h3>"
+
+        document.body.innerHTML=document.body.innerHTML + "<h3>Error</h3>"
     })
-    
+    event.target.name.value="";
+    event.target.email.value="";
+    event.target.password.value="";
 
 
    }
