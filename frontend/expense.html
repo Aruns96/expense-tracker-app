@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+   
+    
+</style>
+</head>
+<body>
+    
+<form onsubmit="saveToLocal(event)">
+    <label for="amount">Choose Expense Amount</label>
+    <input type="number" name="amount" id="amount" >
+    <label for="descripiton">Choose Expense descripiton</label>
+    <input type="text" name="descripiton" id="descripiton"  >
+    <label for="category">Choose a Category</label>
+    <select name="category" id="category">
+        <option value="petrol">petrol</option>
+        <option value="food">food</option>
+        <option value="movie">movie</option>
+        <option value="misc">misc</option>
+    </select>
+    <button>Add Expense</button>
+   
+    
+    
+
+</form>
+<ul id="listItems"></ul>
+
+ 
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+ 
+ <script >
+   function saveToLocal(event){
+    event.preventDefault();
+    const amount = event.target.amount.value;
+    const descripiton= event.target.descripiton.value;
+    const category = event.target.category.value;
+   
+
+   const obj = {
+    amount,
+    descripiton,
+    category
+   }
+  
+    
+    axios.post("http://localhost:3000/expense/addExpense" ,obj)
+    .then(res =>{
+        console.log(res);
+        showItems(res.data.newExpense)
+        
+
+    })
+    .catch(e => {
+        console.log(e)
+
+        document.body.innerHTML=document.body.innerHTML + `<h3>${e}</h3>`
+    })
+    event.target.amount.value="";
+    event.target.descripiton.value="";
+    event.target.category.value="";
+
+
+   }
+  function showItems(expense){
+    const parentNode = document.getElementById("listItems");
+    const child = document.createElement("li");
+    child.id = expense.id;
+    child.innerText = expense.amount + "-" + expense.descripiton + "-" + expense.category;
+    const del = document.createElement("button");
+    del.innerText = "delete";
+    del.onclick = ()=>deleteExpense(expense.id);
+
+    child.appendChild(del);
+    parentNode.appendChild(child);
+
+
+
+  }
+  function deleteExpense(id){
+    axios.delete(`http://localhost:3000/expense/delete-expense/${id}`).then(res=>{
+        
+        removeExpense(id);
+     }).catch(e=>console.log(e));
+  }
+
+  function removeExpense(id){
+     const parentNode = document.getElementById("listItems");
+     const nodeToDelete = document.getElementById(id);
+     if(nodeToDelete){
+         parentNode.removeChild(nodeToDelete);
+     }
+ 
+    }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+         axios.get("http://localhost:3000/expense/get-expense").then(res =>{
+            for(let i=0; i< res.data.allExpense.length ;i++){
+             showItems(res.data.allExpense[i]);
+            }
+            console.log(res.data)
+         })
+         .catch(e=>console.log(e))
+     })
+
+
+ </script> 
+</body>
+</html>

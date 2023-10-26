@@ -46,7 +46,8 @@
     axios.post("http://localhost:3000/user/login" ,obj)
     .then(res =>{
         console.log(res);
-        alert(res.data.message)
+        alert(res.data.message);
+        window.location.href = "../frontend/expense.html";
 
     })
     .catch(e => {

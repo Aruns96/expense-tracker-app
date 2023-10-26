@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const path = require("path");
 
 
 exports.postSignup = async (req,res) =>{
@@ -36,7 +37,7 @@ exports.postLogin = async (req,res) =>{
         }
         
         const user = await User.findAll({where:{email}});
-        console.log(user)
+        
         if(user.length > 0){
           bcrypt.compare(password,user[0].password,(err,result)=>{
             if(err){
@@ -44,6 +45,7 @@ exports.postLogin = async (req,res) =>{
             }
             if(result === true){
                  res.status(201).json({message:"user login succesfully"});
+               
             }else{
                 return res.status(401).json({message:"password incorrect"})
             }
