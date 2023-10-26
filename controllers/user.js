@@ -28,8 +28,23 @@ exports.postLogin = async (req,res) =>{
           return   res.status(400).json({err:"bad params"});
         }
         
-        const data = await User.findAll({where:{email:email,password:password}})
-        res.status(201).json({message:"user login succesfully"});
+        const user = await User.findAll({where:{email}});
+        console.log(user[0].password)
+        if(user.length > 0){
+          
+            
+            if(user[0].password === password){
+                return res.status(201).json({message:"user login succesfully"});
+            }else{
+                return res.status(401).json({message:"password incorrect"})
+            }
+           
+           
+        }else{
+            return res.status(404).json({message:"user not found"})
+        }
+       
+       
 
 
     }catch(e){

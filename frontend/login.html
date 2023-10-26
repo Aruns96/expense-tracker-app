@@ -52,7 +52,7 @@
     .catch(e => {
         console.log(e)
 
-        document.body.innerHTML=document.body.innerHTML + "<h3>Error</h3>"
+        document.body.innerHTML=document.body.innerHTML + `<h3>${e}</h3>`
     })
     
     event.target.email.value="";
