@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 
 exports.postSignup = async (req,res) =>{
@@ -9,9 +10,15 @@ exports.postSignup = async (req,res) =>{
         if(name == undefined || name.length == 0 || email == undefined || email.length == 0 || password == undefined || password.length == 0){
           return   res.status(400).json({err:"bad params"});
         }
+        bcrypt.hash(password,10, async(err,hash)=>{
+            if(err){
+                throw new Error("something went wrong");
+            }
+            await User.create({name:name,email:email,password:hash});
+            res.status(201).json({message:"user created"});
+        })
         
-        const data = await User.create({name:name,email:email,password:password});
-        res.status(201).json({message:"user created"});
+       
 
 
     }catch(e){
@@ -29,15 +36,20 @@ exports.postLogin = async (req,res) =>{
         }
         
         const user = await User.findAll({where:{email}});
-        console.log(user[0].password)
+        console.log(user)
         if(user.length > 0){
-          
-            
-            if(user[0].password === password){
-                return res.status(201).json({message:"user login succesfully"});
+          bcrypt.compare(password,user[0].password,(err,result)=>{
+            if(err){
+                throw new Error("something went wrong")
+            }
+            if(result === true){
+                 res.status(201).json({message:"user login succesfully"});
             }else{
                 return res.status(401).json({message:"password incorrect"})
             }
+          })
+            
+            
            
            
         }else{
