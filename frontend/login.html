@@ -47,6 +47,7 @@
     .then(res =>{
         console.log(res);
         alert(res.data.message);
+        localStorage.setItem("token",res.data.token);
         window.location.href = "../frontend/expense.html";
 
     })

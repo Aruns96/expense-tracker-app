@@ -50,8 +50,8 @@
     category
    }
   
-    
-    axios.post("http://localhost:3000/expense/addExpense" ,obj)
+   const token = localStorage.getItem("token");
+    axios.post("http://localhost:3000/expense/addExpense" ,obj,{headers:{"Authorization":token}})
     .then(res =>{
         console.log(res);
         showItems(res.data.newExpense)
@@ -85,12 +85,16 @@
 
   }
   function deleteExpense(id){
-    axios.delete(`http://localhost:3000/expense/delete-expense/${id}`).then(res=>{
+    const token = localStorage.getItem("token");
+    axios.delete(`http://localhost:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}}).then(res=>{
         
         removeExpense(id);
-     }).catch(e=>console.log(e));
+     }).catch(e=>{console.log(e)
+    showError(e)});
   }
-
+function showError(error){
+    document.body.innerHTML += `<div>${error}</div>`
+}
   function removeExpense(id){
      const parentNode = document.getElementById("listItems");
      const nodeToDelete = document.getElementById(id);
@@ -101,7 +105,8 @@
     }
 
     document.addEventListener("DOMContentLoaded",()=>{
-         axios.get("http://localhost:3000/expense/get-expense").then(res =>{
+        const token = localStorage.getItem("token")
+         axios.get("http://localhost:3000/expense/get-expense",{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
