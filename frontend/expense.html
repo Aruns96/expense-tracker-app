@@ -25,11 +25,14 @@
     </select>
     <button>Add Expense</button>
    
-    
+   
     
 
 </form>
+<button id="btnrazrpy">Buy premium</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <ul id="listItems"></ul>
+<div id="premiumUser"></div>
 
  
  
@@ -110,10 +113,59 @@ function showError(error){
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
-            console.log(res.data)
+            
          })
          .catch(e=>console.log(e))
      })
+    function premiumUser(){
+        document.getElementById("btnrazrpy").remove();
+        const p = document.getElementById("premiumUser");
+        p.innerText = "you are now a premium user";
+
+    }
+
+     document.getElementById("btnrazrpy").onclick = async function(e){
+        
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get("http://localhost:3000/purchase/premium", {
+    headers: { "Authorization": token },
+  });
+        
+        console.log(response);
+        var options = {
+            "key":response.data.key_id,
+            "order_id":response.data.order.id,
+            "handler": async function(response){
+
+
+                 await axios.post(
+        "http://localhost:3000/purchase/updatetransaction",
+        {
+          order_id: options.order_id,
+          payment_id: response.razorpay_payment_id,
+        },
+        { headers: { "Authorization": token } }
+      );
+
+               
+
+                alert("You are a premium user now");
+                premiumUser();
+            }
+
+        };  
+       
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+        e.preventDefault();
+        rzp1.on("payment.failed",function(response){
+            console.log(response);
+            alert("Something went wrong");
+        })
+       
+
+     }
 
 
  </script> 
