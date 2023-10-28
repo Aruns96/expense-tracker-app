@@ -1,6 +1,7 @@
 
 const Order = require("../models/order");
 const Razorpay = require("razorpay");
+const userController = require("../controllers/user")
 require("dotenv").config()
 
 
@@ -46,7 +47,7 @@ exports.updateTranscation = async (req,res) =>{
         const promise1 = order.update({paymentid:payment_id,status:"SUCESSFUL"})
         const promise2 =   req.user.update({ispremiumuser:true});
         Promise.all([promise1,promise2]).then(()=>{
-            return res.status(202).json({message:"transcation success"})
+            return res.status(202).json({message:"transcation success",token:userController.generateAcessToken(req.user.id,true)})
         }).catch(e=>{
             throw  new Error(e);
         })

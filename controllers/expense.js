@@ -22,8 +22,8 @@ exports.postAddExpense = async (req,res) =>{
 }
 exports.getExpense = async (req,res)=>{
     try{
-      // const data = await Expense.findAll({where:{id:req.user.id}});
-       const data = await Expense.findAll();
+      const data = await Expense.findAll({where:{userId:req.user.id}});
+       //const data = await Expense.findAll();
        res.status(200).json({allExpense:data})
 
     }catch(e){
