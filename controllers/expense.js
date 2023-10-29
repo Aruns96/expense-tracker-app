@@ -1,4 +1,6 @@
+const User = require("../models/user");
 const Expense = require("../models/expense");
+const { where } = require("sequelize");
 
 
 
@@ -10,6 +12,10 @@ exports.postAddExpense = async (req,res) =>{
         // }
         
            const data =  await Expense.create({amount:amount,descripiton:descripiton,category:category,userId:req.user.id});
+
+           const totalExpense = Number(req.user.totalexpense) + Number(data.amount);
+           
+           const user = await User.update({totalexpense:totalExpense},{where:{id:req.user.id}})
             res.status(201).json({newExpense:data});
       
         
