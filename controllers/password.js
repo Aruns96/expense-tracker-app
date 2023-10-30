@@ -17,7 +17,7 @@ const postForgotPassword = async(req,res)=>{
       if(user){
 
         const id=uuid.v4()
-            user.createForgotpassword({id,active:true})
+            user.createForgotpassword({id,isactive:true})
             .catch(err=>{
                 throw new Error(err)
             })
@@ -69,9 +69,9 @@ const postForgotPassword = async(req,res)=>{
 const getResetPassword = async(req,res)=>{
     try{
         const id=req.params.id
-        Forgotpassword.findOne({where:{id}}).then(forgotpasswordrequest=>{
+        const forgotpasswordrequest = await Forgotpassword.findOne({where:{id}}).then(forgotpasswordrequest=>{
             if(forgotpasswordrequest){
-                forgotpasswordrequest.update({active:false})
+                forgotpasswordrequest.update({isactive:false})
                 res.status(200).send(`<html>
                 <script>
                     function formsubmitted(e){
@@ -79,7 +79,7 @@ const getResetPassword = async(req,res)=>{
                         console.log('called')
                     }
                 </script>
-                <form action="http://localhost:4000/password/updatepassword/${id}" method="GET">
+                <form action="http://localhost:3000/password/updatepassword/${id}" method="GET">
                     <label for="newpassword">Enter New password</label>
                     <input name="newpassword" type="password" required></input>
                     <button>reset password</button>

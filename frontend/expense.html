@@ -35,6 +35,7 @@
 <ul id="listItems"></ul>
 <div id="premiumUser"></div>
 <ul id="leaderboard"></ul>
+<button onclick="download()" id="download" style="visibility: hidden;">Download</button>
 
  
  
@@ -129,6 +130,7 @@ function showError(error){
         document.getElementById("btnrazrpy").style.visibility = "hidden";
         const p = document.getElementById("premiumUser");
         p.innerHTML = "you are now a premium user";
+        document.getElementById("download").style.visibility = "visible";
 
     }
     function parseJwt (token) {
@@ -210,6 +212,25 @@ function showError(error){
         }
 
      }
+
+     function download(){
+    axios.get('http://localhost:3000/premium/download', {headers: { "Authorization": token }})
+    .then((response) => {
+        if(response.status === 200){
+           
+            var a = document.createElement("a");
+            a.href = response.data.fileUrl;
+            a.download = 'myexpense.csv';
+            a.click();
+        } else {
+            throw new Error(response.data.message)
+        }
+
+    })
+    .catch((err) => {
+        showError(err)
+    });
+}
 
 
  </script> 
