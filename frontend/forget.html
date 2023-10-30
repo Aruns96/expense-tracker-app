@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="Submit(event)">
+        <label for="email">Email</label>
+    <input type="email" name="email" id="email" placeholder="email" required>
+    <input type="submit" name="submit" id="submit" value="submit" >
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script>
+     function Submit(event){
+        event.preventDefault();
+        const email = event.target.email.value;
+
+
+        const obj = {
+   
+   email,
+   
+  }
+  
+   
+   axios.post("http://localhost:3000/password/forgotpassword" ,obj)
+   .then(res =>{
+       console.log(res);
+      
+       
+
+   })
+   .catch(e => {
+       console.log(e)
+
+       document.body.innerHTML=document.body.innerHTML + `<h3>${e}</h3>`
+   })
+   
+   event.target.email.value="";
+   
+
+
+     }
+
+    </script>
+</body>
+</html>

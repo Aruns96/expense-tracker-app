@@ -18,11 +18,12 @@
     <label for="password">Password</label>
     <input type="password" name="password" id="password" placeholder="password" required>
     <button>Login</button>
-    <a href="./index.html">New user-Sign up</a>
+    
     
 
 </form>
-
+<a href="./index.html">New user-Sign up</a>
+<button id="fgtbtn">forgot password</button>
  
  
  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
@@ -62,7 +63,10 @@
 
 
    }
-
+  const fgtbtn = document.getElementById("fgtbtn");
+  fgtbtn.onclick = function (){
+    window.location.href = "../frontend/forget.html";
+  }
   
 
 
