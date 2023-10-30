@@ -1,21 +1,24 @@
 const User = require("../models/user");
 const Expense = require("../models/expense");
-const { where } = require("sequelize");
+const sequelize = require("../utils/database")
 
 
 
 exports.postAddExpense = async (req,res) =>{
+    const t = await sequelize.transaction();
     try{
+        
        const {amount,descripiton,category} = req.body;
         // if(name == undefined || name.length == 0 || email == undefined || email.length == 0 || password == undefined || password.length == 0){
         //   return   res.status(400).json({err:"bad params"});
         // }
         
-           const data =  await Expense.create({amount:amount,descripiton:descripiton,category:category,userId:req.user.id});
+           const data =  await Expense.create({amount:amount,descripiton:descripiton,category:category,userId:req.user.id},{transaction:t});
 
            const totalExpense = Number(req.user.totalexpense) + Number(data.amount);
            
-           const user = await User.update({totalexpense:totalExpense},{where:{id:req.user.id}})
+           const user = await User.update({totalexpense:totalExpense},{where:{id:req.user.id},transaction:t});
+           await t.commit();
             res.status(201).json({newExpense:data});
       
         
@@ -23,6 +26,7 @@ exports.postAddExpense = async (req,res) =>{
 
 
     }catch(e){
+        await t.rollback();
         res.status(500).json({error:e});
     }
 }
@@ -38,22 +42,34 @@ exports.getExpense = async (req,res)=>{
 }
 
 exports.deleteExpense = async (req,res)=>{
+    const t = await sequelize.transaction();
     try{
        if(!req.params.id == "undefined"){
         return res.status(400).json({err:"id not found"});
        }
        const expenseId = req.params.id;
 
-      const noOfRows =  await Expense.destroy({where:{id:expenseId,userId:req.user.id}});
+      const noOfRows =  await Expense.destroy({where:{id:expenseId,userId:req.user.id},transaction:t});
+      
       if(noOfRows === 0){
-        res.status(401).json({message:"Expense donot belongs to user"})
+        res.status(401).json({message:"Expense donot belongs to user"});
+        await t.rollback();
       }
       else{
+        const data = await Expense.findAll({where:{userId:req.user.id}});
+        const totalExpense = Number(req.user.totalexpense) - Number(data.amount) ;
+        const user = await User.update({totalexpense:totalExpense},{where:{id:req.user.id},transaction:t});
+
+       
+        await t.commit();
         res.status(200).json({message:"deleted"});
+        
       }
       
 
     }catch(e){
+        console.log(e)
+        await t.rollback();
         res.status(500).json({err:e});
     }
 }
