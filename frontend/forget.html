@@ -28,18 +28,14 @@
    
    axios.post("http://localhost:3000/password/forgotpassword" ,obj)
    .then(res =>{
-       console.log(res);
-      
-       
-
-   })
-   .catch(e => {
-       console.log(e)
-
-       document.body.innerHTML=document.body.innerHTML + `<h3>${e}</h3>`
-   })
-   
-   event.target.email.value="";
+    if(res.status === 200){
+            document.body.innerHTML += '<div style="color:red;">Mail Successfuly sent <div>'
+        } else {
+            throw new Error('Something went wrong!!!')
+        }
+    }).catch(err => {
+        document.body.innerHTML += `<div style="color:red;">${err} <div>`;
+    })
    
 
 

@@ -7,6 +7,8 @@ const routes = express.Router();
 
 
 routes.post("/forgotpassword",passwordController.postForgotPassword);
+routes.get("/resetpassword/:id",passwordController.getResetPassword);
+routes.get("/updatepassword/:resetpasswordid", passwordController.getUpdatePassword)
 
 
 
