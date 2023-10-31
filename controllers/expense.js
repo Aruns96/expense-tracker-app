@@ -32,11 +32,31 @@ exports.postAddExpense = async (req,res) =>{
 }
 exports.getExpense = async (req,res)=>{
     try{
-      const data = await Expense.findAll({where:{userId:req.user.id}});
+        console.log("queryitems",req.query,"queypage",req.query.page)
+        const ITEM_PER_PAGE = 2;
+        const page =Number(req.query.page);
+       
+        let totalItems = await Expense.count({where:{userId:req.user.id}});
+        
+      let data = await Expense.findAll({
+        offset:(page-1)*ITEM_PER_PAGE,
+        limit:ITEM_PER_PAGE,
+        where:{userId:req.user.id}});
+
+        
+
        //const data = await Expense.findAll();
-       res.status(200).json({allExpense:data})
+       res.status(200).json({allExpense:data,
+        pageData:{currentPage: page,
+            hasNextPage: ITEM_PER_PAGE * page < totalItems,
+            nextPage: page + 1,
+            hasPreviousPage: page > 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEM_PER_PAGE),}
+    })
 
     }catch(e){
+        console.log(e)
         res.status(500).json({err:e});
     }
 }

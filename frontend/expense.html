@@ -37,6 +37,7 @@
 <ul id="leaderboard"></ul>
 <button onclick="download()" id="download" style="visibility: hidden;">Download</button>
 <ul id="files"></ul>
+<div id="pagination"></div>
 
  
  
@@ -44,6 +45,10 @@
 
  
  <script >
+   
+    const pagination = document.getElementById("pagination");
+
+
    function saveToLocal(event){
     event.preventDefault();
     const amount = event.target.amount.value;
@@ -112,6 +117,7 @@ function showError(error){
     }
 
     document.addEventListener("DOMContentLoaded",()=>{
+        const page = 1;
         const token = localStorage.getItem("token");
         const decoded = parseJwt(token);
         console.log(decoded)
@@ -119,14 +125,48 @@ function showError(error){
             premiumUser();
             showLeaderBoard();
         }
-         axios.get("http://localhost:3000/expense/get-expense",{headers:{"Authorization":token}}).then(res =>{
+         axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
-            
+            showPagination(res.data.pageData)
          })
          .catch(e=>console.log(e))
      })
+    
+     function showPagination({currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage}){
+              pagination.innerHTML = '';
+              if(hasPreviousPage){
+                const btn2 = document.createElement("button");
+                btn2.innerHTML = previousPage;
+                btn2.addEventListener("click",()=>getExpense(PreviousPage))
+                pagination.appendChild(btn2)
+              }
+              const btn1 = document.createElement("button");
+                btn1.innerHTML = `<h3>${currentPage}</h3>`;
+                btn1.addEventListener("click",()=>getExpense(currentPage))
+                pagination.appendChild(btn1)
+                if(hasNextPage){
+                const btn3 = document.createElement("button");
+                btn3.innerHTML = nextPage;
+                btn3.addEventListener("click",()=>getExpense(nextPage))
+                pagination.appendChild(btn3)
+              }
+     }
+     function getExpense(page){
+        const token = localStorage.getItem("token");
+        axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers:{"Authorization":token}}).then(res =>{
+            for(let i=0; i< res.data.allExpense.length ;i++){
+             showItems(res.data.allExpense[i]);
+            }
+            showPagination(res.data.pageData)
+         })
+         .catch(e=>console.log(e))
+     }
+
+
+
+
     function premiumUser(){
         document.getElementById("btnrazrpy").style.visibility = "hidden";
         const p = document.getElementById("premiumUser");
