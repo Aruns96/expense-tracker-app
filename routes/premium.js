@@ -7,6 +7,7 @@ const routes = express.Router();
 
 
 routes.get("/showleaderboard",authorization.authorize,premiumController.getUserLeaderBoard);
+routes.get("/download",authorization.authorize,premiumController.getDownload);
 
 
 
