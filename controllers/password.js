@@ -4,7 +4,7 @@ const sequelize = require("../utils/database");
 const uuid = require("uuid");
 const brevo = require('@getbrevo/brevo');
 const bcrypt=require('bcrypt')
-require("dotenv").config()
+//require("dotenv").config()
 
 
 const postForgotPassword = async(req,res)=>{

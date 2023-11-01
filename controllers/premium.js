@@ -4,7 +4,7 @@ const Expense = require("../models/expense");
 const sequelize = require("../utils/database");
 const S3services = require("../services/S3services")
 const AWS = require("aws-sdk");
-require("dotenv").config();
+//require("dotenv").config();
 
 
 const getUserLeaderBoard = async(req,res)=>{

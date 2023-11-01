@@ -2,7 +2,7 @@
 const Order = require("../models/order");
 const Razorpay = require("razorpay");
 const userController = require("../controllers/user")
-require("dotenv").config()
+//require("dotenv").config()
 
 
 exports.purchasePremium = async (req,res) =>{

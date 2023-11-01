@@ -1,4 +1,6 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 const sequelize = require("./utils/database");
 const cors = require("cors");
 const helmet = require("helmet");
