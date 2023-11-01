@@ -37,6 +37,15 @@
 <ul id="leaderboard"></ul>
 <button onclick="download()" id="download" style="visibility: hidden;">Download</button>
 <ul id="files"></ul>
+<div>
+    <select id="pagesize">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+    </select>
+</div>
 <div id="pagination"></div>
 
  
@@ -45,8 +54,25 @@
 
  
  <script >
-   
+   const page = 1;
     const pagination = document.getElementById("pagination");
+    let pagesize
+    function pagelimit() {
+        pagesize = document.getElementById("pagesize").value;
+        if(localStorage.getItem("pagesize")){
+            pagesize = localStorage.getItem("pagesize")
+            document.getElementById("pagesize").value=pagesize
+        }else{
+        localStorage.setItem("pagesize", pagesize);
+        } 
+}
+    pagelimit();
+    document.getElementById("pagesize").addEventListener("change", () => {
+  pagesize = document.getElementById("pagesize").value;
+  localStorage.setItem("pagesize", pagesize);
+  localStorage.getItem('pagesize')
+  getExpense(page);
+});
 
 
    function saveToLocal(event){
@@ -117,7 +143,7 @@ function showError(error){
     }
 
     document.addEventListener("DOMContentLoaded",()=>{
-        const page = 1;
+        
         const token = localStorage.getItem("token");
         const decoded = parseJwt(token);
         console.log(decoded)
@@ -125,7 +151,7 @@ function showError(error){
             premiumUser();
             showLeaderBoard();
         }
-         axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers:{"Authorization":token}}).then(res =>{
+         axios.get(`http://localhost:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
@@ -133,29 +159,43 @@ function showError(error){
          })
          .catch(e=>console.log(e))
      })
-    
+     function deleterow() {
+        document.getElementById("listItems").innerHTML = "";
+     }
      function showPagination({currentPage,hasNextPage,nextPage,hasPreviousPage,previousPage,lastPage}){
               pagination.innerHTML = '';
               if(hasPreviousPage){
                 const btn2 = document.createElement("button");
                 btn2.innerHTML = previousPage;
-                btn2.addEventListener("click",()=>getExpense(PreviousPage))
+                btn2.addEventListener("click",()=>{
+                    deleterow(),
+                    getExpense(previousPage)
+                    
+                }
+                )
                 pagination.appendChild(btn2)
               }
               const btn1 = document.createElement("button");
                 btn1.innerHTML = `<h3>${currentPage}</h3>`;
-                btn1.addEventListener("click",()=>getExpense(currentPage))
+                btn1.addEventListener("click",()=>{
+                    deleterow(),
+                    getExpense(currentPage)
+                })
                 pagination.appendChild(btn1)
                 if(hasNextPage){
                 const btn3 = document.createElement("button");
                 btn3.innerHTML = nextPage;
-                btn3.addEventListener("click",()=>getExpense(nextPage))
+                btn3.addEventListener("click",()=>{
+                    deleterow(),
+                    getExpense(nextPage)
+                   
+                })
                 pagination.appendChild(btn3)
               }
      }
      function getExpense(page){
         const token = localStorage.getItem("token");
-        axios.get(`http://localhost:3000/expense/get-expense?page=${page}`,{headers:{"Authorization":token}}).then(res =>{
+        axios.get(`http://localhost:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
