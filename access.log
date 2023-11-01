@@ -1,0 +1,1 @@
+::1 - - [01/Nov/2023:05:45:36 +0000] "GET /expense/get-expense?page=1&limit=2 HTTP/1.1" 200 435 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
