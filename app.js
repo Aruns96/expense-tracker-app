@@ -52,7 +52,11 @@ Forgotpassword.belongsTo(User);
 User.hasMany(Downloadfiles);
 Downloadfiles.belongsTo(User);
 
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`public/expensetracker-frontend/${req.url}`))
+})
+
 
 sequelize.sync().then((result)=>{
-    app.listen(3000);
+    app.listen(process.env.PORT||3000); 
 }).catch(e=>console.log(e));
