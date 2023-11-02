@@ -37,7 +37,9 @@ app.use("/premium",premiumRoute);
 app.use("/password",passwordRoute);
 
 
-
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`public/expensetracker-frontend/${req.url}`))
+})
 
 
 User.hasMany(Expense);
@@ -52,9 +54,7 @@ Forgotpassword.belongsTo(User);
 User.hasMany(Downloadfiles);
 Downloadfiles.belongsTo(User);
 
-app.use((req,res)=>{
-    res.sendFile(path.join(__dirname,`public/expensetracker-frontend/${req.url}`))
-})
+
 
 
 sequelize.sync().then((result)=>{
