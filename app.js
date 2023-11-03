@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const sequelize = require("./utils/database");
 const cors = require("cors");
-const helmet = require("helmet");
+//const helmet = require("helmet");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
@@ -26,7 +26,7 @@ app.use(bodyParser.json({extended:false}));
 app.use(cors());
 
 const log = fs.createWriteStream(path.join(__dirname,"access.log"),{flags:'a'});
-app.use(helmet());
+//app.use(helmet());
 app.use(morgan('combined',{stream:log}));
 
 
