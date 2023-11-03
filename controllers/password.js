@@ -35,7 +35,7 @@ const postForgotPassword = async(req,res)=>{
         let sendSmtpEmail = new brevo.SendSmtpEmail();
         
         sendSmtpEmail.subject = "send from brevo";
-        sendSmtpEmail.htmlContent = `<a href="http://localhost:3000/password/resetpassword/${id}">reset password</a>`;
+        sendSmtpEmail.htmlContent = `<a href="http://54.242.109.178:3000/password/resetpassword/${id}">reset password</a>`;
         
         sendSmtpEmail.sender = { "name": "Arun", "email": "thatarunsdev@gmail.com" };
         sendSmtpEmail.to = [
