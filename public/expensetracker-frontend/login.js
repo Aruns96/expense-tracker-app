@@ -21,7 +21,7 @@ form.addEventListener("submit", saveToLocal);
         console.log(res);
         alert(res.data.message);
         localStorage.setItem("token",res.data.token);
-        window.location.href = "../expensetracker-frontend/expense.html";
+        window.location.href = "../expense.html";
 
     })
     .catch(e => {
@@ -37,6 +37,6 @@ form.addEventListener("submit", saveToLocal);
    }
   const fgtbtn = document.getElementById("fgtbtn");
   fgtbtn.onclick = function (){
-    window.location.href = "../expensetracker-frontend/forget.html";
+    window.location.href = "../forget.html";
   }
   
