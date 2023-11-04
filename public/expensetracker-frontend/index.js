@@ -17,7 +17,7 @@ form.addEventListener("submit", saveToLocal);
    }
    
     
-    axios.post("http://54.242.109.178:3000/user/sign-up" ,obj)
+    axios.post("http://54.167.89.13:3000/user/sign-up" ,obj)
     .then(res =>{
         console.log(res);
         

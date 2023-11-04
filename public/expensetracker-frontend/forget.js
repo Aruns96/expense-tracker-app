@@ -16,7 +16,7 @@ email,
 }
 
 
- axios.post("http://54.242.109.178:3000/password/forgotpassword" ,obj)
+ axios.post("http://54.167.89.13:3000/password/forgotpassword" ,obj)
 .then(res =>{
 if(res.status === 200){
         document.body.innerHTML += '<div style="color:red;">Mail Successfuly sent <div>'

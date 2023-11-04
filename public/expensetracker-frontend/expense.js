@@ -26,7 +26,7 @@ const page = 1;
 });
 
 
-   async function saveToLocal(event){
+    function saveToLocal(event){
     event.preventDefault();
     const amount = event.target.amount.value;
     const descripiton= event.target.descripiton.value;
@@ -40,7 +40,7 @@ const page = 1;
    }
   
    const token = localStorage.getItem("token");
-   await axios.post("http://54.242.109.178:3000/expense/addExpense" ,obj,{headers:{"Authorization":token}})
+    axios.post("http://54.167.89.13:3000/expense/addExpense" ,obj,{headers:{"Authorization":token}})
     .then(res =>{
         console.log(res);
         showItems(res.data.newExpense)
@@ -75,7 +75,7 @@ const page = 1;
   }
   function deleteExpense(id){
     const token = localStorage.getItem("token");
-    axios.delete(`http://54.242.109.178:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}}).then(res=>{
+    axios.delete(`http://54.167.89.13:3000/expense/delete-expense/${id}`,{headers:{"Authorization":token}}).then(res=>{
         
         removeExpense(id);
      }).catch(e=>{console.log(e)
@@ -102,7 +102,7 @@ function showError(error){
             premiumUser();
             showLeaderBoard();
         }
-         axios.get(`http://54.242.109.178:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
+         axios.get(`http://54.167.89.13:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
@@ -146,7 +146,7 @@ function showError(error){
      }
      function getExpense(page){
         const token = localStorage.getItem("token");
-        axios.get(`http://54.242.109.178:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
+        axios.get(`http://54.167.89.13:3000/expense/get-expense?page=${page}&limit=${pagesize}`,{headers:{"Authorization":token}}).then(res =>{
             for(let i=0; i< res.data.allExpense.length ;i++){
              showItems(res.data.allExpense[i]);
             }
@@ -179,7 +179,7 @@ function showError(error){
         const token = localStorage.getItem("token");
         
          
-        const response = await axios.get("http://54.242.109.178:3000/purchase/premium", {
+        const response = await axios.get("http://54.167.89.13:3000/purchase/premium", {
     headers: { "Authorization": token },
   });
         
@@ -191,7 +191,7 @@ function showError(error){
 
 
               const res =   await axios.post(
-        "http://54.242.109.178:3000/purchase/updatetransaction",
+        "http://54.167.89.13:3000/purchase/updatetransaction",
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -229,7 +229,7 @@ function showError(error){
          div.appendChild(input);
         input.onclick = async()=>{
             const token = localStorage.getItem("token");
-            const userLeadBoardArray = await axios.get("http://54.242.109.178:3000/premium/showleaderboard", {
+            const userLeadBoardArray = await axios.get("http://54.167.89.13:3000/premium/showleaderboard", {
     headers: { "Authorization": token },
   });
   console.log(userLeadBoardArray)
@@ -247,7 +247,7 @@ function showError(error){
 
      function download(){
         const token = localStorage.getItem("token");
-    axios.get('http://54.242.109.178:3000/premium/download', {headers: { "Authorization": token }})
+    axios.get('http://54.167.89.13:3000/premium/download', {headers: { "Authorization": token }})
     .then((response) => {
         if(response.status === 200){
            
