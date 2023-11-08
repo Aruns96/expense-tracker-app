@@ -69,7 +69,7 @@ const postForgotPassword = async(req,res)=>{
 const getResetPassword = async(req,res)=>{
     try{
         const id=req.params.id
-        const forgotpasswordrequest = await Forgotpassword.findOne({where:{id}}).then(forgotpasswordrequest=>{
+        await Forgotpassword.findOne({where:{id}}).then(forgotpasswordrequest=>{
             if(forgotpasswordrequest){
                 forgotpasswordrequest.update({isactive:false})
                 res.status(200).send(`<html>

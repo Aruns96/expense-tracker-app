@@ -19,6 +19,7 @@ form.addEventListener("submit", saveToLocal);
     
     axios.post("http://54.167.89.13:3000/user/sign-up" ,obj)
     .then(res =>{
+        window.location.href = "../login.html";
         console.log(res);
         
 

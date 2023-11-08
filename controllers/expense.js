@@ -65,28 +65,21 @@ exports.getExpense = async (req,res)=>{
 exports.deleteExpense = async (req,res)=>{
     const t = await sequelize.transaction();
     try{
-       if(!req.params.id == "undefined"){
-        return res.status(400).json({err:"id not found"});
-       }
-       const expenseId = req.params.id;
-
-      const noOfRows =  await Expense.destroy({where:{id:expenseId,userId:req.user.id},transaction:t});
-      
-      if(noOfRows === 0){
-        res.status(401).json({message:"Expense donot belongs to user"});
-        await t.rollback();
-      }
-      else{
-        const data = await Expense.findAll({where:{userId:req.user.id}});
-        const totalExpense = Number(req.user.totalexpense) - Number(data.amount) ;
-        const user = await User.update({totalexpense:totalExpense},{where:{id:req.user.id},transaction:t});
-
-       
-        await t.commit();
-        res.status(200).json({message:"deleted"});
-        
-      }
-      
+   
+     const id = req.params.id;
+     let exp = await Expense.findByPk(id);
+     
+     const totalExpense = Number(req.user.totalexpense) - Number(exp.amount);
+     
+     await User.update(
+       {
+         totalexpense: totalExpense,
+       },
+       { where: { id: req.user.id }, transaction: t }
+     );
+    await exp.destroy({ where: { userId: req.user.id } });
+     await t.commit();
+     res.status(200).json({ success: true, message: "DELETED" });
 
     }catch(e){
         console.log(e)
